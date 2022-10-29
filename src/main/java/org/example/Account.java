@@ -2,13 +2,13 @@ package org.example;
 
 public abstract class Account implements IBaseRate{
     // List common properties for savings and checking accounts
-    String name;
-    String sSN;
-    double balance;
+    private String name;
+    private String sSN;
+    private double balance;
 
-    static int index = 10000;
-    String accountNumber;
-    double rate;
+    private static int index = 10000;
+    protected String accountNumber;
+    protected double rate;
 
 
 
@@ -18,12 +18,15 @@ public abstract class Account implements IBaseRate{
       this.sSN = sSN;
       balance = initDeposit;
 
-        System.out.println("Name: " + name + " sSN: " + sSN + " Balance: " + balance);
-
         // Set account number
         index++;
         this.accountNumber = setAccountNumber();
+
+        setRate();
+
     }
+
+    public abstract void setRate();
 
     //
     private String setAccountNumber(){
@@ -33,8 +36,44 @@ public abstract class Account implements IBaseRate{
         return lastTwoOfSSN + uniqueID + randomNumber;
     }
 
+    public void compound(){
+        double accuredInterest = balance * (rate/100);
+        balance = balance + accuredInterest;
+        System.out.println("Accrued Interested: $" + accuredInterest);
+    }
 
-    // List common methods
+    // List common methods - transactions
+    public void deposit(double amount){
+        balance = balance + amount;
+        System.out.println("Depositing $" + amount);
+        printBalance();
+    }
+
+    public void withdraw(double amount){
+        balance = balance - amount;
+        System.out.println("Withdrawing $" + amount);
+        printBalance();
+    }
+
+    public void transfer(String toWhere, double amount){
+        balance = balance - amount;
+        System.out.println("Thansfering $" + amount + " to " + toWhere);
+        printBalance();
+
+    }
+
+    public void printBalance(){
+        System.out.println("Your balance is now: $" + balance);
+    }
+
+    public void showInfo(){
+        System.out.println(
+                "Name: " + name +
+                        "\nAccount Number: " + accountNumber +
+                        "\nBalance: " + balance +
+                        "\nRate: " + rate + "%"
+        );
+    }
 
 
 }
